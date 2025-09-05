@@ -27,3 +27,4 @@ if command -v minikube &> /dev/null; then
     echo "minikube se ha instalado correctamente. Versión: $(minikube version | head -n 1)"
 else
     echo "Hubo un problema instalando minikube."
+fi

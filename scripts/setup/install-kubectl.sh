@@ -27,3 +27,4 @@ if command -v kubectl &> /dev/null; then
     echo "kubectl se ha instalado correctamente. Versión: $(kubectl version)"
 else
     echo "Hubo un problema instalando kubectl."
+fi
