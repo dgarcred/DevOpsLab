@@ -5,17 +5,17 @@
 2. [Introducción](#-introducción)  
 3. [Conceptos clave](#-conceptos-clave)  
     - [¿Qué es ArgoCD?](#qué-es-argocd)  
-    - [Application]()
-    - [Project]()
-    - [Sincronización (sync)]()
-    - [Kustomize]()
-    - [Jsonnet]()
-    - [Hooks y Waves]()
-    - [Health y Status]()
-    - [Rollback y History]()
-    - [RBAC y Seguridad]()
-    - [Integración con CI/CD y GitOps]()
-    - [Notificaciones y Webhooks]()
+    - [Application](#application)
+    - [Project](#project)
+    - [Sincronización (sync)](#sincronización-sync)
+    - [Kustomize](#kustomize)
+    - [Jsonnet](#jsonnet)
+    - [Hooks y Waves](#hooks-y-waves)
+    - [Health y Status](#health-y-status)
+    - [Rollback y History](#rollback-y-history)
+    - [RBAC y Seguridad](#rbac-y-seguridad)
+    - [Integración con CI/CD y GitOps](#integración-con-cicd-y-gitops)
+    - [Notificaciones y Webhooks](#notificaciones-y-webhooks)
 4. [Estrategias de gestión de manifiestos](#-estrategias-de-gestión-de-manifiestos)
 5. [Instalación](#️-instalación)  
 6. [Quickstart](#-quickstart)  
@@ -236,69 +236,52 @@ ArgoCD soporta varios mecanismos de gestión de manifiestos:
     kubectl get all -n argocd
     ```
 
-4. **Exponer la interfaz web (opcional, para entorno local)**
-    ```bash
-    kubectl port-forward svc/argocd-server -n argocd 8080:443
-    ```
-    Accede a la interfaz en https://localhost:8080
-
-5. **Exponer el servidor de ArgoCD**  
-    Por defecto, el servicio es interno (ClusterIP). Exponerlo:   
-    ```bash
-    kubectl port-forward svc/argocd-server -n argocd 8080:443
-    ```
-
 ---
 
 ## ⚡ Quickstart
 
-1. **Exponer la interfaz web (opcional, para entorno local)**
+1. **Exponer el servidor de ArgoCD**  
+    Por defecto, el servicio es interno (ClusterIP). Exponerlo: 
     ```bash
     kubectl port-forward svc/argocd-server -n argocd 8080:443
     ```
     Accede a la interfaz en [https://localhost:8080](https://localhost:8080)
 
-2. **Exponer el servidor de ArgoCD**  
-    Por defecto, el servicio es interno (ClusterIP). Exponerlo: 
-    ```bash
-    kubectl port-forward svc/argocd-server -n argocd 8080:443
-    ```
-
-3. **Obtener la contraseña inicial del usuario admin**
+2. **Obtener la contraseña inicial del usuario admin**
     Se puede usar cualquiera de estos dos comandos:
     ```bash
     kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d && echo
     argocd admin initial-password -n argocd
     ```
 
-4. **Loguearse en el clúster de ArgoCD de minikube**
+3. **Loguearse en el clúster de ArgoCD de minikube**
     ```bash
     argocd login localhost:8080 --username admin --password <password> --insecure
     argocd cluster list
     ```
 
-5. **Actualizar la contraseña del usuario admin**
+4. **Actualizar la contraseña del usuario admin**
     ```bash
     argocd account update-password
     ```
 
-6. **Eliminar secreto de la contraseña inicial del admin**
+5. **Eliminar secreto de la contraseña inicial del admin**
     ```bash
     kubectl delete secret argocd-initial-admin-secret -n argocd
     ```
 
-7. **Registrar un repositorio de prueba**
+6. **Registrar un repositorio de prueba**
     ```bash
     argocd repo add https://github.com/argoproj/argocd-example-apps.git
     argocd repo list
     ```
 
-8. **Crear namespace para la aplicación de prueba**
+7. **Crear namespace para la aplicación de prueba**
     ```bash
     kubectl create namespace argocd-test-app
     ```
 
-9. **Registrar una aplicación de prueba**
+8. **Registrar una aplicación de prueba**
     ```bash
     argocd app create guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
@@ -308,23 +291,23 @@ ArgoCD soporta varios mecanismos de gestión de manifiestos:
     argocd app list
     ```
 
-10. **Ver el estado de la app**
+9. **Ver el estado de la app**
     ```bash
     argocd app list
     argocd app get guestbook
     ```
 
-11. **Sincronizar la aplicación**
+10. **Sincronizar la aplicación**
     ```bash
     argocd app sync guestbook
     ```
 
-12. **Ver la aplicación corriendo**
+11. **Ver la aplicación corriendo**
     ```bash
     kubectl get pods -n argocd-test-app
     ```
 
-13. **Exponer la aplicación con minikube**
+12. **Exponer la aplicación con minikube**
     ```bash
     minikube service guestbook-ui -n argocd-test-app
     ```
