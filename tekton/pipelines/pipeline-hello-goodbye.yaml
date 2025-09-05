@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-goodbye-pipeline
+spec:
+  params:
+    - name: username
+      type: string
+      description: The name of the user to greet and say goodbye to
+      default: "World"
+  tasks:
+    - name: hello
+      taskRef:
+        name: hello-task
+    - name: goodbye
+      taskRef:
+        name: goodbye-task
+      runAfter:
+        - hello
+      params:
+        - name: username
+          value: "$(params.username)"

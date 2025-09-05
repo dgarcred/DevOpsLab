@@ -1,0 +1,20 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: tt-hello-template
+spec:
+  params:
+    - name: username
+      description: The name of the user to greet
+      default: "Kubernetes"
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: hello-goodbye-pipeline-run-
+      spec:
+        pipelineRef:
+          name: hello-goodbye-pipeline
+        params:
+          - name: username
+            value: $(tt.params.username)

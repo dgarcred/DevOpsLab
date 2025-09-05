@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob 
+metadata:
+  name: tekton-cleaner-cronjob
+  namespace: default
+spec:
+  schedule: "0 * * * *"  # Runs daily at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: tekton-cleaner-sa
+          restartPolicy: OnFailure
+          containers:
+          - name: tekton-cleaner
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Limpiando pods completados y fallidos..."
+              kubectl delete pod --field-selector=status.phase==Succeeded -n default || true
+              kubectl delete pod --field-selector=status.phase==Failed -n default || true
+              echo "Limpiando TaskRun y PipelineRun de Tekton..."
+              kubectl delete taskrun --all -n default || true
+              kubectl delete pipelinerun --all -n default || true
